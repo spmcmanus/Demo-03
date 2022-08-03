@@ -25,7 +25,7 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_NAME: 'McManus-Demo-03'    # set this to your application's name
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'https://mcmanus-demo-03.azurewebsites.net'      # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '16.6'                # set this to the node version to use
 
 permissions:
