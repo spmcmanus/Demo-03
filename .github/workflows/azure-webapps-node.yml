@@ -24,8 +24,8 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: 'McManus-Demo-03'    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: 'https://mcmanus-demo-03.azurewebsites.net'      # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_NAME: 'McManus-Demo-03'    # set this to your application's name
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'https://mcmanus-demo-03.azurewebsites.net'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '16.6'                # set this to the node version to use
 
 permissions:
@@ -58,4 +58,4 @@ jobs:
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
