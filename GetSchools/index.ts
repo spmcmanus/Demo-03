@@ -1,5 +1,6 @@
 import { CosmosClient } from "@azure/cosmos";
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
+import { SourceMap } from "module";
 
 const config = {
     endpoint: "https://spm-db-account.documents.azure.com:443/",
@@ -9,8 +10,15 @@ const config = {
     partitionKey: { kind: "Hash", paths: ["/category"] }
 };
 
+function contains(arr, key, val) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i][key] === val) return true;
+    }
+    return false;
+}
+
 const getSchools: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
-    context.log('HTTP trigger function to access Azure COSMOS DB');
+    console.log("query",req.query);
     const conf = (req.query.conf || (req.body && req.body.conf));
 
     // Connect to db
@@ -20,20 +28,35 @@ const getSchools: AzureFunction = async function (context: Context, req: HttpReq
     const container = database.container(containerId);
     
     // query to return all items
-    const querySpec = { query: "SELECT * from c" };
+    const querySpec = { query: "SELECT * from Schools" };
   
     // read all items in the Items container
     const { resources: items } = await container.items
         .query(querySpec)
         .fetchAll();
   
-    items.forEach(item => {
+
+
+    // Filter Items on Stuff
+    let thisYear = new Date().getFullYear();
+    console.log("thisYear is ",thisYear)
+    let filteredItems = items.filter(item => {
+        return item.Conferences.some(conf => {
+            return conf.name === req.query.conf && conf.status === "Active"
+        });
+    });
+
+
+
+
+    filteredItems.forEach(item => {
         console.log(`${item.id} - ${item.School}`);
     });
+
     
     context.res = {
         status: 200, /* Defaults to 200 */
-        body: items
+        body: filteredItems
     };
 
 };
