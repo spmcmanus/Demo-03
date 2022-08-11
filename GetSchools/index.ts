@@ -41,13 +41,15 @@ const getSchools: AzureFunction = async function (context: Context, req: HttpReq
     let thisYear = new Date().getFullYear();
     console.log("thisYear is ",thisYear)
     let filteredItems = items.filter(item => {
-        return item.Conferences.some(conf => {
-            return conf.name === req.query.conf && conf.status === "Active"
-        });
+        if (req.query.conf) {
+            return item.Conferences.some(conf => {
+                return conf.name === req.query.conf && conf.status === "Active"     
+            });
+        } else {
+            return item;
+        } 
     });
-
-
-
+    
 
     filteredItems.forEach(item => {
         console.log(`${item.id} - ${item.School}`);
